@@ -1,0 +1,1596 @@
+<!DOCTYPE html>
+<html lang="fr" class="bg-[#18332A]">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dr Simon Deffrennes | L'excellence dentaire à Armentières</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300..700;1,300..700&family=Outfit:wght@100..900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Limelight&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sage: '#878C7E',
+                        forest: '#18332A',
+                        sand: '#ADA597',
+                        white: '#FFFFFF',
+                        black: '#000000',
+                        cream: '#F9F8F6'
+                    },
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                        serif: ['Cormorant', 'serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- GSAP (Animations) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+    <style>
+        body { margin: 0; background-color: #F9F8F6; overflow-x: hidden; }
+        
+        /* Premium custom cursor */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 9999;
+            pointer-events: none;
+        }
+        .cursor-dot { width: 8px; height: 8px; background-color: #18332A; }
+        .cursor-outline { width: 40px; height: 40px; border: 1px solid rgba(24, 51, 42, 0.5); transition: width 0.2s, height 0.2s; }
+        
+        /* Video Container */
+        .hero { position: relative; width: 100vw; height: 100vh; overflow: hidden; background: #000; }
+        .hero iframe {
+            position: absolute; top: 50%; left: 50%;
+            width: 100vw; height: 56.25vw; /* 16:9 */
+            min-height: 100vh; min-width: 177.77vh; /* 16:9 */
+            transform: translate(-50%, -50%);
+            pointer-events: none;
+        }
+        
+        /* Fullscreen Menu */
+        .menu-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100vh;
+            background-color: #18332A; color: #F9F8F6;
+            z-index: 40; clip-path: circle(0% at top right);
+            transition: clip-path 0.8s cubic-bezier(0.77, 0, 0.175, 1);
+        }
+        .menu-overlay.open { clip-path: circle(150% at top right); }
+        .menu-link {
+            position: relative; display: inline-block; overflow: hidden; font-weight: 300;
+        }
+        .menu-link::after {
+            content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 1px;
+            background-color: #ADA597; transform: scaleX(0); transform-origin: right;
+            transition: transform 0.5s ease;
+        }
+        .menu-link:hover::after { transform: scaleX(1); transform-origin: left; }
+
+        .image-reveal { clip-path: polygon(0 0, 100% 0, 100% 0, 0 0); }
+
+        /* Animated care cards */
+        .treatment-card {
+            position: relative;
+            overflow: hidden;
+            isolation: isolate;
+        }
+        .treatment-card::before {
+            content: '';
+            position: absolute;
+            inset: -120% auto auto -120%;
+            width: 220%;
+            height: 220%;
+            background: linear-gradient(115deg, transparent 38%, rgba(255,255,255,0.2) 50%, transparent 62%);
+            transform: rotate(8deg);
+            transition: transform 0.8s ease;
+            pointer-events: none;
+            z-index: 0;
+        }
+        .treatment-card:hover::before { transform: translateX(25%) rotate(8deg); }
+        .treatment-card > * { position: relative; z-index: 1; }
+
+        .tech-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 999px;
+            background: #18332A;
+            box-shadow: 0 0 0 0 rgba(24, 51, 42, 0.4);
+            animation: techPulse 2.4s infinite;
+        }
+        @keyframes techPulse {
+            0% { box-shadow: 0 0 0 0 rgba(24, 51, 42, 0.35); }
+            70% { box-shadow: 0 0 0 12px rgba(24, 51, 42, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(24, 51, 42, 0); }
+        }
+
+        .team-immersive {
+            position: relative;
+            min-height: 92vh;
+            border-radius: 2rem;
+            overflow: hidden;
+        }
+
+        .team-chip {
+            backdrop-filter: blur(6px);
+            background: rgba(24, 51, 42, 0.45);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            color: #fff;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+        }
+
+        .care-index {
+            font-family: 'Outfit', sans-serif;
+            letter-spacing: 0.18em;
+            font-size: 10px;
+            color: rgba(24, 51, 42, 0.35);
+        }
+
+        .section-shell {
+            border: 1px solid rgba(24, 51, 42, 0.08);
+            background: linear-gradient(180deg, rgba(255,255,255,0.78), rgba(255,255,255,0.55));
+            backdrop-filter: blur(8px);
+            border-radius: 1.5rem;
+        }
+
+        .section-ink {
+            background: radial-gradient(circle at 20% 20%, #2b4c41 0%, #18332A 55%, #122821 100%);
+            color: #F9F8F6;
+            border-radius: 1.75rem;
+        }
+
+        .angled-image { clip-path: none; }
+
+        .welcome-stage {
+            border-radius: 1.8rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, #23463B 0%, #2A5245 45%, #7F7568 100%);
+            color: #F9F8F6;
+            box-shadow: 0 24px 50px rgba(24, 51, 42, 0.25);
+        }
+
+        .welcome-note {
+            backdrop-filter: blur(8px);
+            background: rgba(255, 255, 255, 0.12);
+            border: 1px solid rgba(255, 255, 255, 0.22);
+            border-radius: 1rem;
+            padding: 1rem 1.1rem;
+        }
+
+        .logo-orb {
+            position: relative;
+            width: 110px;
+            height: 110px;
+            border-radius: 999px;
+            display: grid;
+            place-items: center;
+            background: rgba(255,255,255,0.18);
+            border: 1px solid rgba(255,255,255,0.4);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 12px 35px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+
+        .logo-orb::before {
+            content: '';
+            position: absolute;
+            inset: -14%;
+            border-radius: 999px;
+            border: 1px dashed rgba(255,255,255,0.45);
+            animation: logoSpin 14s linear infinite;
+        }
+
+        @keyframes logoSpin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .welcome-visual {
+            position: relative;
+            overflow: hidden;
+            border-radius: 1.8rem;
+            box-shadow: 0 30px 60px rgba(24, 51, 42, 0.23);
+        }
+
+        .welcome-visual::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(115deg, rgba(24,51,42,0.65), rgba(24,51,42,0.15) 40%, rgba(173,165,151,0.28));
+            pointer-events: none;
+        }
+
+        .welcome-kenburns {
+            animation: kenburnsSoft 12s ease-in-out infinite alternate;
+            transform-origin: center;
+        }
+
+        @keyframes kenburnsSoft {
+            from { transform: scale(1.02) translateY(0); }
+            to { transform: scale(1.08) translateY(-1.5%); }
+        }
+
+        .welcome-chip {
+            backdrop-filter: blur(8px);
+            background: rgba(24,51,42,0.34);
+            border: 1px solid rgba(255,255,255,0.28);
+            color: #fff;
+        }
+
+        .welcome-logo-mini {
+            width: 64px;
+            height: 64px;
+            object-fit: contain;
+            opacity: 0.9;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.35));
+            animation: logoBreath 3.2s ease-in-out infinite;
+        }
+
+        @keyframes logoBreath {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-4px) scale(1.04); }
+        }
+
+        .intro-title-banner {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .intro-title-bg {
+            width: 100%;
+            height: 100%;
+            background-size: 700px; /* Taille optimale pour créer un motif lisible */
+            background-position: center;
+            background-repeat: repeat; /* Répétition à l'infini pour habiller tous les côtés sans bordures vides */
+            opacity: 0.04;
+            mix-blend-mode: multiply;
+            pointer-events: none;
+        }
+
+        .intro-title-text {
+            position: relative;
+            z-index: 10;
+            font-family: 'Cormorant', serif;
+            font-size: clamp(1.4rem, 4.5vw, 4.5rem); /* Agrandissement net du texte principal (anciennement 3.5rem) */
+            font-weight: 400;
+            white-space: nowrap;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: #18332a;
+        }
+
+        /* Sous-menu spécialités & Animations */
+        .intro-submenu .hover-line {
+            position: relative;
+            padding-bottom: 2px;
+            cursor: pointer;
+            transition: color 0.4s ease;
+        }
+        
+        .intro-submenu .hover-line::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 1px;
+            background-color: #18332a;
+            transform: scaleX(0);
+            transform-origin: right;
+            transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Animation au hover manuel */
+        .intro-submenu .hover-line:hover {
+            color: #18332a;
+        }
+        .intro-submenu .hover-line:hover::after {
+            transform: scaleX(1);
+            transform-origin: left;
+        }
+
+        /* Animation automatique qui s'arrête si au survol de la section */
+        @keyframes sequenceLine {
+            0%, 15%, 100% { transform: scaleX(0); transform-origin: right; }
+            20%, 35% { transform: scaleX(1); transform-origin: left; }
+            40% { transform: scaleX(0); transform-origin: right; }
+        }
+
+        .intro-submenu:not(:hover) .hover-line:nth-child(1)::after { animation: sequenceLine 14s infinite 0s; }
+        .intro-submenu:not(:hover) .hover-line:nth-child(3)::after { animation: sequenceLine 14s infinite 3.5s; }
+        .intro-submenu:not(:hover) .hover-line:nth-child(5)::after { animation: sequenceLine 14s infinite 7s; }
+        .intro-submenu:not(:hover) .hover-line:nth-child(7)::after { animation: sequenceLine 14s infinite 10.5s; }
+    </style>
+    <script src="https://player.vimeo.com/api/player.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.19/bundled/lenis.min.js"></script>
+</head>
+<body class="font-sans text-forest antialiased">
+
+    <!-- Preloader -->
+    <div id="preloader" class="fixed inset-0 z-[9999] bg-[#F9F8F6] flex flex-col items-center justify-center">
+        <div class="relative flex flex-col items-center">
+            <img src="images/logo-dr-defrennes.png" alt="Logo Docteur Simon Deffrennes" class="h-24 md:h-32 object-contain hidden" id="preloader-logo-img" onerror="this.src='';">
+            <div id="preloader-logo" class="h-40 md:h-64 lg:h-80 w-72 md:w-[28rem] lg:w-[40rem] bg-contain bg-no-repeat bg-center opacity-0" style="background-image: url('images/logo-dr-defrennes.png');"></div>
+            
+            <div class="w-48 md:w-56 h-[1px] bg-forest/20 mt-10 overflow-hidden relative opacity-0" id="preloader-line">
+                <div class="absolute top-0 left-0 h-full bg-forest w-full origin-left -translate-x-full" id="preloader-progress"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Custom Cursor -->
+    <div class="cursor-dot hidden md:block"></div>
+    <div class="cursor-outline hidden md:block"></div>
+
+    <!-- Minimal Modern Navbar -->
+    <nav class="fixed top-0 left-0 w-full z-50 p-6 md:p-10 flex justify-between items-center transition-all duration-500" id="navbar">
+        <a href="#" class="relative z-50 h-24 md:h-32 w-auto group flex items-center transition-all duration-500">
+            <img src="images/logo-clair.png" alt="Logo Dr Simon Deffrennes" class="h-24 md:h-32 w-auto object-contain transition-all duration-500 group-hover:scale-105" id="nav-logo" onerror="this.src=''; this.alt='Dr Simon Deffrennes'; this.className='text-2xl font-serif font-light tracking-widest';"/>
+        </a>
+        
+        <div class="relative z-50 flex items-center gap-8">
+            <a href="#contact" class="hidden md:inline-flex items-center gap-3 px-6 py-3 border border-white/50 bg-forest text-white rounded-full uppercase tracking-widest text-xs font-semibold shadow-[0_8px_30px_rgba(0,0,0,0.25)] hover:bg-sage hover:border-sage transition-all duration-300" id="nav-cta">
+                Prendre RDV
+            </a>
+            <button id="menu-toggle" class="h-12 pl-4 pr-2 rounded-full border border-white/50 bg-black/20 backdrop-blur-sm inline-flex items-center gap-3 cursor-pointer group hover:opacity-90 hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)] transition-all duration-300">
+                <span class="uppercase tracking-[0.2em] text-[10px] font-semibold text-white" id="menu-text">Menu</span>
+                <span class="w-8 h-8 rounded-full border border-current/30 inline-flex flex-col justify-center items-center gap-[5px]">
+                    <span class="w-4 h-[2px] bg-white transition-all duration-300 transform origin-center" id="line1"></span>
+                    <span class="w-3 h-[2px] bg-white transition-all duration-300 transform origin-center group-hover:w-4" id="line2"></span>
+                </span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Fullscreen Menu -->
+    <div id="menu" class="menu-overlay flex flex-col justify-center items-center overflow-hidden">
+        <!-- Decorative subtle background elements -->
+        <div class="absolute top-0 right-0 w-[80vw] h-[80vw] bg-sand/5 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2 pointer-events-none"></div>
+        <div class="absolute bottom-0 left-0 w-[60vw] h-[60vw] bg-sand/5 rounded-full blur-[100px] translate-y-1/3 -translate-x-1/3 pointer-events-none"></div>
+        
+        <!-- Large Background Logo -->
+        <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.03]">
+            <img src="images/logo-clair.png" alt="Bg" class="w-[80vw] max-w-[800px] object-contain rotate-[-5deg]">
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 w-full max-w-7xl px-8 md:px-12 h-full items-center pt-24 md:pt-0 relative z-10 gap-12">
+            
+            <!-- Information Column -->
+            <div class="hidden md:flex flex-col md:col-span-5 text-cream/80 font-light justify-center h-full pr-12 border-r border-white/10">
+                <div class="mb-12">
+                    <p class="uppercase tracking-[0.4em] text-[10px] mb-4 text-sand font-semibold">Cabinet Dentaire</p>
+                    <p class="text-4xl lg:text-5xl font-serif text-white">Dr Simon<br>Deffrennes</p>
+                </div>
+                
+                <p class="leading-relaxed text-sm lg:text-base max-w-md mb-12 text-white/50">
+                    Créer des sourires authentiques, allier le fait-main français et la dentisterie d'avant-garde.
+                </p>
+                
+                <div class="flex flex-col gap-8">
+                    <!-- Address -->
+                    <div class="group">
+                        <p class="uppercase tracking-[0.2em] text-[9px] text-white/40 mb-2">Adresse</p>
+                        <a href="https://www.google.com/maps?q=87+Rue+de+Dunkerque,+59280+Armentières" target="_blank" class="text-sm lg:text-base hover:text-sand transition-colors block">
+                            87 Rue de Dunkerque,<br>59280 Armentières
+                        </a>
+                    </div>
+                    
+                    <!-- Phone -->
+                    <div class="group">
+                        <p class="uppercase tracking-[0.2em] text-[9px] text-white/40 mb-2">Téléphone</p>
+                        <a href="tel:+33320491732" class="text-xl lg:text-3xl font-serif hover:text-sand transition-colors block">
+                            03 20 49 17 32
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Action Button in Menu -->
+                <div class="mt-12">
+                    <a href="https://www.doctolib.fr/dentiste/armentieres/simon-deffrennes" target="_blank" class="inline-flex items-center justify-center px-8 py-4 bg-sand text-forest rounded-full uppercase tracking-widest text-[10px] font-bold hover:bg-white transition-all duration-300">
+                        Prendre rendez-vous
+                    </a>
+                </div>
+            </div>
+
+            <!-- Links Column -->
+            <div class="flex flex-col md:col-span-7 justify-center h-full pl-0 md:pl-12">
+                <ul class="flex flex-col space-y-4 md:space-y-8 text-5xl md:text-6xl lg:text-7xl font-serif text-right md:text-left">
+                    <li class="overflow-hidden"><a href="#accueil" class="menu-link nav-item block hover:text-sand transition-colors hover:translate-x-2 duration-300">Accueil</a></li>
+                    <li class="overflow-hidden"><a href="#cabinet" class="menu-link nav-item block hover:text-sand transition-colors hover:translate-x-2 duration-300">Le Cabinet</a></li>
+                    <li class="overflow-hidden"><a href="#equipe" class="menu-link nav-item block hover:text-sand transition-colors hover:translate-x-2 duration-300">L'Équipe</a></li>
+                    <li class="overflow-hidden"><a href="#traitements" class="menu-link nav-item block hover:text-sand transition-colors hover:translate-x-2 duration-300">Expertises</a></li>
+                    <li class="overflow-hidden"><a href="#laboratoire" class="menu-link nav-item block hover:text-sand transition-colors hover:translate-x-2 duration-300">Label France</a></li>
+                    <li class="overflow-hidden"><a href="#contact" class="menu-link nav-item block hover:text-sand transition-colors hover:translate-x-2 duration-300">Contact</a></li>
+                </ul>
+            </div>
+            
+        </div>
+    </div>
+
+    <!-- Hero Section: Just the Video -->
+    <section id="accueil" class="hero">
+        <iframe id="hero-video" src="https://player.vimeo.com/video/1178221873?api=1&autoplay=1&loop=1&autopause=0&muted=1&controls=0&title=0&byline=0&portrait=0" frameborder="0" allow="autoplay; fullscreen; picture-in-picture" allowfullscreen></iframe>
+
+        <!-- Sound Toggle Button -->
+        <div id="sound-toggle" class="absolute bottom-10 right-6 md:right-12 z-[100] w-14 h-14 flex items-center justify-center rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white hover:bg-white/20 hover:scale-105 transition-all duration-300 cursor-pointer pointer-events-auto mix-blend-difference group shadow-2xl" title="Gérer le son">
+            <!-- Action to TAKE: Unmute (shows sound waves). Visible by default because video is muted -->
+            <svg id="icon-action-unmute" class="w-6 h-6 text-white transition-transform group-hover:scale-110 drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.898a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+            </svg>
+            <!-- Action to TAKE: Mute (shows cross). Hidden by default -->
+            <svg id="icon-action-mute" class="w-6 h-6 text-white transition-transform group-hover:scale-110 hidden drop-shadow-md" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2"></path>
+            </svg>
+        </div>
+        
+        <!-- Scroll indicator -->
+        <div class="absolute bottom-12 left-1/2 transform -translate-x-1/2 flex flex-col items-center gap-4 mix-blend-difference text-white opacity-80 z-20">
+            <span class="text-[10px] uppercase tracking-[0.3em] font-light">Découvrir</span>
+            <div class="w-px h-16 bg-white/20 overflow-hidden relative">
+                <div class="absolute top-0 left-0 w-full h-full bg-white origin-top animate-scroll"></div>
+            </div>
+        </div>
+        <style>
+            @keyframes scroll {
+                0% { transform: scaleY(0); }
+                50% { transform: scaleY(1); }
+                100% { transform: scaleY(0); transform-origin: bottom; }
+            }
+            .animate-scroll { animation: scroll 2s infinite ease-in-out; }
+        </style>
+    </section>
+
+    <!-- Main Content -->
+    <main class="bg-gradient-to-b from-[#F3F1EC] to-cream relative z-10 pb-20 rounded-t-[3rem] -mt-10 overflow-hidden shadow-[0_-20px_50px_rgba(0,0,0,0.1)]">
+
+        <!-- Titre d'introduction -->
+        <section class="w-full relative pt-28 pb-20 mb-4 overflow-hidden flex flex-col justify-center items-center">
+            <!-- Wrapper des écritures répétées pour couvrir parfaitement tous les côtés -->
+            <div class="intro-title-banner pointer-events-none">
+                <div class="intro-title-bg" style="background-image: url('images/ecritures-logo.png');"></div>
+            </div>
+            
+            <!-- Conteneur Flex pour habiller les côtés avec des lignes fines -->
+            <div class="w-full flex items-center justify-center max-w-[92%] mx-auto z-10 relative mb-3">
+                <div class="h-px bg-[#18332a]/20 flex-1 hidden md:block rounded-full gs-parallax"></div>
+                <h2 class="intro-title-text mx-4 md:mx-10 gsap-fade-up">
+                    Cabinet Dentaire d'Armentières
+                </h2>
+                <div class="h-px bg-[#18332a]/20 flex-1 hidden md:block rounded-full gs-parallax"></div>
+            </div>
+            
+            <!-- Sous-menu spécialités -->
+            <div class="intro-submenu mt-5 gsap-fade-up z-10 relative flex flex-wrap justify-center items-center gap-3 md:gap-8 text-[9px] md:text-xs tracking-[0.2em] uppercase font-medium text-[#18332a]/80">
+                <a href="#implantologie" class="hover-line">Implantologie</a>
+                <span class="text-sand/50">—</span>
+                <a href="#chirurgie" class="hover-line">Chirurgie</a>
+                <span class="text-sand/50">—</span>
+                <a href="#parodontologie" class="hover-line">Parodontologie</a>
+                <span class="text-sand/50">—</span>
+                <a href="#omnipratique" class="hover-line">Omnipratique</a>
+            </div>
+        </section>
+
+        <!-- Wrapper Coloré Section Bienvenue (moitié) -> Fin Traitements -->
+        <div class="relative w-full">
+            <!-- Arrière-plan dégradé qui débute à environ la moitié du bloc visuel et s'anime au scroll -->
+            <div id="treatments-bg" class="absolute bottom-0 left-0 w-full z-0 top-[40vh] md:top-[48vh] opacity-0" style="background: linear-gradient(to bottom, #F3F1EC 0%, #878c7e 250px, #878c7e 100%);"></div>
+
+            <!-- Accueil : bienvenue -->
+            <section class="px-0 relative z-10 w-full mb-0 md:px-0">
+                <div class="gsap-fade-up welcome-visual h-[82vh] md:h-[96vh] relative">
+                    <img src="images/_DSF0146-Panorama.jpg" alt="Vue du cabinet" class="welcome-kenburns w-full h-[118%] object-cover absolute top-[-10%] gs-parallax" onerror="this.src='images/_DSF0190.jpg'">
+                    <div class="absolute right-4 md:right-8 bottom-4 md:bottom-8 z-10 max-w-[94%] md:max-w-2xl">
+                        <div class="welcome-chip rounded-3xl px-6 py-6 md:px-8 md:py-8 pr-24 md:pr-28 relative">
+                            <p class="text-[10px] uppercase tracking-[0.24em] text-sand mb-3">Bienvenue</p>
+                            <h2 class="text-3xl md:text-5xl font-serif leading-tight mb-4">Ici, vous êtes écouté avant d'être soigné.</h2>
+                            <p class="text-sm md:text-base leading-relaxed text-white/90">Un environnement moderne, élégant et chaleureux, pensé pour rassurer. Nous prenons le temps d'expliquer chaque étape, avec une approche humaine et des soins de haute précision.</p>
+                            <a href="#contact" class="mt-5 inline-flex px-5 py-2.5 rounded-full bg-white text-forest text-[11px] uppercase tracking-widest font-semibold hover:bg-sand hover:text-white transition-colors">Parler avec l'équipe</a>
+                            <img src="images/logo-clair.png" alt="Logo Dr Simon Deffrennes" class="welcome-logo-mini absolute right-5 md:right-7 bottom-5 md:bottom-7">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Soins pratiqués : Interactive Editorial Showcase -->
+            <section id="traitements" class="w-full pb-16 md:pb-32 pt-16 md:pt-32 relative z-10 overflow-hidden text-cream mt-0">
+                
+                <!-- Background Illustration aligned with right column -->
+                <div class="absolute inset-x-0 top-0 max-w-[94%] mx-auto flex flex-col lg:flex-row gap-12 md:gap-20 pointer-events-none z-0 h-full">
+                    <div class="hidden lg:block lg:w-5/12 flex-shrink-0"></div>
+                    <div class="w-full lg:w-7/12 relative h-full">
+                        <img src="images/dessin-armentieres.png" alt="" class="absolute top-0 left-0 w-[500px] md:w-[900px] max-w-[150%] md:max-w-[120%] opacity-40 brightness-200 mix-blend-screen origin-top-left">
+                    </div>
+                </div>
+
+                <!-- Section Title (Top) -->
+                <div class="max-w-[94%] mx-auto mb-16 md:mb-24 gsap-fade-up border-l border-white/20 pl-6 md:pl-10 relative z-10">
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="h-px w-8 bg-cream/50"></span>
+                        <span class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-cream/70 font-medium">Nos traitements</span>
+                    </div>
+                    <h3 class="font-serif text-4xl md:text-6xl lg:text-7xl text-white leading-[1.1]">L'art de <span class="italic font-light text-cream/60">vous soigner.</span></h3>
+                </div>
+
+                <div class="max-w-[94%] mx-auto flex flex-col lg:flex-row gap-12 md:gap-20">
+                    
+                    <!-- Left: Typography & Navigation -->
+                    <div class="lg:w-5/12 flex flex-col justify-center">
+                        <div class="flex flex-col space-y-6 md:space-y-10" id="treatments-list">
+                            
+                            <!-- Item 0 : Implantologie -->
+                            <div class="treatment-item cursor-pointer group active" data-index="0">
+                                <div class="flex items-start gap-4 md:gap-8">
+                                    <div class="mt-2 w-6 md:w-8 flex-shrink-0 flex justify-center transition-all duration-500 opacity-100">
+                                        <!-- Icône Implant géométrique -->
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9" class="w-6 h-10">
+                                            <rect x="10" y="3" width="4" height="4" />
+                                            <line x1="8" y1="7" x2="16" y2="7" />
+                                            <path d="M9 7l1.5 14h3L15 7" />
+                                            <line x1="8.5" y1="11" x2="15.5" y2="11" />
+                                            <line x1="9" y1="15" x2="15" y2="15" />
+                                            <line x1="9.5" y1="19" x2="14.5" y2="19" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="treatment-title font-serif text-[2.5rem] md:text-6xl text-white transition-all duration-700 leading-none">Implantologie</h3>
+                                        <div class="treatment-content overflow-hidden transition-all duration-700 max-h-[200px] opacity-100 mt-4">
+                                            <p class="text-sm md:text-base font-light text-cream/90 leading-relaxed tracking-wide max-w-sm">
+                                                Bilan 3D, planification chirurgicale, pose implantaire et restauration prothétique. Un protocole lisible, continu et sur-mesure.
+                                            </p>
+                                            <a href="#implantologie" class="inline-flex items-center gap-2 mt-5 text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-white border-b border-white/30 pb-1 hover:border-white transition-colors group/btn">
+                                                En savoir plus
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Item 1 : Chirurgie -->
+                            <div class="treatment-item cursor-pointer group" data-index="1">
+                                <div class="flex items-start gap-4 md:gap-8">
+                                    <div class="mt-2 w-6 md:w-8 flex-shrink-0 flex justify-center transition-all duration-500 opacity-30 group-hover:opacity-60 treatment-icon-inactive">
+                                        <!-- Icône Outils (Bistouri et Miroir croisés abstraits) -->
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9" class="w-6 h-10">
+                                            <!-- Manche scalpel -->
+                                            <line x1="7" y1="21" x2="13" y2="11" />
+                                            <!-- Lame scalpel -->
+                                            <polygon points="13,11 14,7 16,9 13.5,12.5" />
+                                            <!-- Manche miroir -->
+                                            <line x1="17" y1="21" x2="11" y2="11" />
+                                            <!-- Tête miroir -->
+                                            <circle cx="9" cy="7" r="3" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="treatment-title font-serif text-[1.8rem] md:text-4xl text-cream/40 group-hover:text-cream/70 transition-all duration-700 leading-none">Chirurgie</h3>
+                                        <div class="treatment-content overflow-hidden transition-all duration-700 max-h-0 opacity-0 mt-0">
+                                            <p class="text-sm md:text-base font-light text-cream/90 leading-relaxed tracking-wide max-w-sm">
+                                                Extractions complexes, greffes osseuses et aménagement tissulaire réalisés avec précision sous loupes binoculaires.
+                                            </p>
+                                            <a href="#chirurgie" class="inline-flex items-center gap-2 mt-5 text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-white border-b border-white/30 pb-1 hover:border-white transition-colors group/btn">
+                                                En savoir plus
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Item 2 : Parodontologie -->
+                            <div class="treatment-item cursor-pointer group" data-index="2">
+                                <div class="flex items-start gap-4 md:gap-8">
+                                    <div class="mt-2 w-6 md:w-8 flex-shrink-0 flex justify-center transition-all duration-500 opacity-30 group-hover:opacity-60 treatment-icon-inactive">
+                                        <!-- Icône Paro (Ligne de gencive et os) -->
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9" class="w-6 h-10">
+                                            <polyline points="2,12 8,12 10,8 14,8 16,12 22,12" />
+                                            <path d="M10 12v6l2 2 2-2v-6" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="treatment-title font-serif text-[1.8rem] md:text-4xl text-cream/40 group-hover:text-cream/70 transition-all duration-700 leading-none">Parodontologie</h3>
+                                        <div class="treatment-content overflow-hidden transition-all duration-700 max-h-0 opacity-0 mt-0">
+                                            <p class="text-sm md:text-base font-light text-cream/90 leading-relaxed tracking-wide max-w-sm">
+                                                Traitement des affections des gencives et de l'os alvéolaire. Assainissement profond pour préserver les fondations de votre sourire.
+                                            </p>
+                                            <a href="#parodontologie" class="inline-flex items-center gap-2 mt-5 text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-white border-b border-white/30 pb-1 hover:border-white transition-colors group/btn">
+                                                En savoir plus
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Item 3 : Omnipratique -->
+                            <div class="treatment-item cursor-pointer group" data-index="3">
+                                <div class="flex items-start gap-4 md:gap-8">
+                                    <div class="mt-2 w-6 md:w-8 flex-shrink-0 flex justify-center transition-all duration-500 opacity-30 group-hover:opacity-60 treatment-icon-inactive">
+                                        <!-- Icône Dent géométrique -->
+                                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="0.9" class="w-6 h-10">
+                                            <path d="M7 4h10v6l-1 2v6l-2 2h-4l-2-2v-6l-1-2V4z" />
+                                            <line x1="12" y1="14" x2="12" y2="20" />
+                                        </svg>
+                                    </div>
+                                    <div class="flex-1">
+                                        <h3 class="treatment-title font-serif text-[1.8rem] md:text-4xl text-cream/40 group-hover:text-cream/70 transition-all duration-700 leading-none">Omnipratique</h3>
+                                        <div class="treatment-content overflow-hidden transition-all duration-700 max-h-0 opacity-0 mt-0">
+                                            <p class="text-sm md:text-base font-light text-cream/90 leading-relaxed tracking-wide max-w-sm">
+                                                Soins conservateurs, endodontie et prévention de l'adulte. Restaurer la fonction dentaire avec les matériaux les plus exigeants.
+                                            </p>
+                                            <a href="#omnipratique" class="inline-flex items-center gap-2 mt-5 text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-white border-b border-white/30 pb-1 hover:border-white transition-colors group/btn">
+                                                En savoir plus
+                                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-3 h-3 group-hover/btn:translate-x-1 transition-transform"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <!-- Arrows Controls -->
+                        <div class="mt-14 flex items-center gap-6 ml-10 md:ml-16 gsap-fade-up">
+                            <button id="treat-prev" class="w-14 h-14 rounded-full border border-white/20 flex justify-center items-center text-white/60 hover:bg-white hover:text-[#878c7e] hover:border-white transition-all duration-300">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="w-6 h-6"><path d="M15 19l-7-7 7-7"/></svg>
+                            </button>
+                            <button id="treat-next" class="w-14 h-14 rounded-full border border-white/20 flex justify-center items-center text-white/60 hover:bg-white hover:text-[#878c7e] hover:border-white transition-all duration-300">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" class="w-6 h-6"><path d="M9 5l7 7-7 7"/></svg>
+                            </button>
+                            <!-- Indicateur de progression -->
+                            <div class="flex gap-2 ml-4">
+                                <span class="w-[3px] h-[3px] rounded-full bg-white treat-dot transition-all duration-300 transform scale-150"></span>
+                                <span class="w-[3px] h-[3px] rounded-full bg-white/30 treat-dot transition-all duration-300"></span>
+                                <span class="w-[3px] h-[3px] rounded-full bg-white/30 treat-dot transition-all duration-300"></span>
+                                <span class="w-[3px] h-[3px] rounded-full bg-white/30 treat-dot transition-all duration-300"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Visual Gallery Backdrop -->
+                    <div class="lg:w-7/12 mt-12 lg:mt-0 relative h-[60vh] lg:h-[85vh] rounded-[2rem] overflow-hidden gsap-fade-up shadow-2xl">
+                        <div id="treat-img-0" class="absolute inset-0 transition-opacity duration-1000 opacity-100">
+                            <img src="images/implantologie-implant-dentaire.jpg" alt="Implantologie" class="w-full h-full object-cover">
+                        </div>
+                        <div id="treat-img-1" class="absolute inset-0 transition-opacity duration-1000 opacity-0 pointer-events-none">
+                            <img src="images/chirurgie.jpg" alt="Chirurgie" class="w-full h-full object-cover">
+                        </div>
+                        <div id="treat-img-2" class="absolute inset-0 transition-opacity duration-1000 opacity-0 pointer-events-none">
+                            <img src="images/parodontologie.jpg" alt="Parodontologie" class="w-full h-full object-cover">
+                        </div>
+                        <div id="treat-img-3" class="absolute inset-0 transition-opacity duration-1000 opacity-0 pointer-events-none">
+                            <img src="images/esthetique.jpg" alt="Omnipratique" class="w-full h-full object-cover" onerror="this.src='images/_DSF0154.jpg'">
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Script pour l'interactivité de cette section -->
+                <script>
+                    document.addEventListener('DOMContentLoaded', () => {
+                        const items = document.querySelectorAll('.treatment-item');
+                        const dots = document.querySelectorAll('.treat-dot');
+                        const btnPrev = document.getElementById('treat-prev');
+                        const btnNext = document.getElementById('treat-next');
+                        let currentIndex = 0;
+                        const maxIndex = items.length - 1;
+                        let autoPlayInterval;
+
+                        function startAutoPlay() {
+                            autoPlayInterval = setInterval(() => {
+                                currentIndex = currentIndex === maxIndex ? 0 : currentIndex + 1;
+                                updateTreatments(currentIndex);
+                            }, 5000); // Change l'image toutes les 5 secondes
+                        }
+
+                        function stopAutoPlay() {
+                            clearInterval(autoPlayInterval);
+                        }
+
+                        function updateTreatments(index) {
+                            items.forEach((item, i) => {
+                                const title = item.querySelector('.treatment-title');
+                                const content = item.querySelector('.treatment-content');
+                                const icon = item.querySelector('div.mt-2'); 
+                                
+                                if (i === index) {
+                                    item.classList.add('active');
+                                    title.className = 'treatment-title font-serif text-[2.5rem] md:text-6xl text-white transition-all duration-700 leading-none';
+                                    content.className = 'treatment-content overflow-hidden transition-all duration-700 max-h-[200px] opacity-100 mt-4';
+                                    icon.className = 'mt-2 w-6 md:w-8 flex-shrink-0 flex justify-center transition-all duration-500 opacity-100';
+                                    
+                                    document.getElementById('treat-img-' + i).style.opacity = '1';
+                                    document.getElementById('treat-img-' + i).classList.remove('pointer-events-none');
+                                    
+                                    dots[i].className = 'w-[3px] h-[3px] rounded-full bg-white treat-dot transition-all duration-300 transform scale-150';
+                                } else {
+                                    item.classList.remove('active');
+                                    title.className = 'treatment-title font-serif text-[1.8rem] md:text-4xl text-cream/40 group-hover:text-cream/70 transition-all duration-700 leading-none';
+                                    content.className = 'treatment-content overflow-hidden transition-all duration-700 max-h-0 opacity-0 mt-0';
+                                    icon.className = 'mt-2 w-6 md:w-8 flex-shrink-0 flex justify-center transition-all duration-500 opacity-30 group-hover:opacity-60 treatment-icon-inactive';
+                                    
+                                    document.getElementById('treat-img-' + i).style.opacity = '0';
+                                    document.getElementById('treat-img-' + i).classList.add('pointer-events-none');
+                                    
+                                    dots[i].className = 'w-[3px] h-[3px] rounded-full bg-white/30 treat-dot transition-all duration-300';
+                                }
+                            });
+                        }
+
+                        items.forEach((item, index) => {
+                            item.addEventListener('click', () => {
+                                currentIndex = index;
+                                updateTreatments(currentIndex);
+                                stopAutoPlay();
+                                startAutoPlay(); // Relance le minuteur après l'interaction
+                            });
+                        });
+
+                        btnNext.addEventListener('click', () => {
+                            currentIndex = currentIndex === maxIndex ? 0 : currentIndex + 1;
+                            updateTreatments(currentIndex);
+                            stopAutoPlay();
+                            startAutoPlay();
+                        });
+
+                        btnPrev.addEventListener('click', () => {
+                            currentIndex = currentIndex === 0 ? maxIndex : currentIndex - 1;
+                            updateTreatments(currentIndex);
+                            stopAutoPlay();
+                            startAutoPlay();
+                        });
+                        
+                        // Démarre la lecture automatique
+                        startAutoPlay();
+
+                        // Animation au scroll pour révéler le fond de manière fluide
+                        if (typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined') {
+                            gsap.to('#treatments-bg', {
+                                scrollTrigger: {
+                                    trigger: '#treatments-bg',
+                                    start: "top 75%", // Commence l'apparition quand le bord haut arrive à 75% de l'écran
+                                    end: "top 25%",   // Finit quand il est à 25% (entièrement opaque)
+                                    scrub: 1.5,       // Liaison au scroll avec un petit lissage (1.5s)
+                                },
+                                opacity: 1,
+                                ease: "power1.inOut"
+                            });
+                        }
+                    });
+                </script>
+            </section>
+        </div>
+
+        <!-- Cabinet : Horizontal Scroll Gallery -->
+        <section id="cabinet" class="w-full relative z-10 pt-16 md:pt-24 mt-20 mb-20 md:mb-32">
+            <!-- Header section of the gallery -->
+            <div class="max-w-[94%] mx-auto mb-12 flex flex-col md:flex-row md:items-end justify-between gap-8 border-b border-forest/10 pb-10 gsap-fade-up">
+                <div>
+                    <div class="flex items-center gap-4 mb-4">
+                        <span class="h-px w-8 bg-sage/80"></span>
+                        <span class="text-[10px] md:text-xs uppercase tracking-[0.3em] text-sage font-medium">Le Cabinet</span>
+                    </div>
+                    <h3 class="font-serif text-4xl md:text-6xl text-forest leading-[1.1]">Une atmosphère<br><span class="italic font-light text-forest/70">pensée pour vous.</span></h3>
+                </div>
+                <p class="text-sm md:text-base text-forest/80 max-w-md font-light leading-relaxed">
+                    Un espace où la technologie de pointe rencontre l'élégance et le confort. Nous avons façonné un environnement apaisant, conçu pour faire de chaque visite un vrai moment de sérénité.
+                </p>
+            </div>
+
+            <!-- Horizontal Scroll Wrapper -->
+            <div id="cabinet-pin-container" class="w-full overflow-hidden relative">
+                <!-- Track -->
+                <div id="cabinet-track" class="flex flex-nowrap items-center w-[max-content] gap-4 md:gap-8 px-[3%] h-[75vh] md:h-[85vh]">
+                    
+                    <!-- Panel 1 : The Bento Grid (Current) -->
+                    <div class="cabinet-panel w-[94vw] lg:w-[85vw] h-full flex-shrink-0">
+                        <div class="grid grid-cols-1 md:grid-cols-12 gap-4 md:gap-6 h-full">
+                            <!-- Main big vertical image (Left) -->
+                            <div class="md:col-span-5 rounded-[2rem] overflow-hidden relative group cursor-pointer gallery-trigger" data-title="Salle de stérilisation" data-desc="Une asepsie rigoureuse et des protocoles stricts pour votre sécurité absolue.">
+                                <img src="images/_DSF0091-Panorama.jpg" alt="Cabinet vue principale" class="w-full h-[115%] object-cover absolute top-[-7.5%] transition-transform duration-[1.5s] ease-out group-hover:scale-105 gs-parallax gallery-img" onerror="this.src='images/_DSF0095.jpg'">
+                                <div class="absolute inset-0 bg-forest/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            </div>
+
+                            <!-- Right Column (Split in two rows) -->
+                            <div class="md:col-span-7 flex flex-col gap-4 md:gap-6 h-full">
+                                <!-- Top horizontal image -->
+                                <div class="rounded-[2rem] overflow-hidden relative group flex-1 min-h-[30vh] md:min-h-0 cursor-pointer gallery-trigger" data-title="Salle de soins 1" data-desc="Conçue pour des soins d'une extrême précision dans un cadre serein.">
+                                    <img src="images/_DSF0190.jpg" alt="Espace de consultation" class="w-full h-[140%] object-cover absolute top-[-20%] transition-transform duration-[1.5s] ease-out group-hover:scale-105 gs-parallax gallery-img">
+                                    <div class="absolute inset-0 bg-forest/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                </div>
+                                <!-- Bottom row (Split in two) -->
+                                <div class="flex flex-col md:flex-row gap-4 md:gap-6 flex-1">
+                                    <div class="rounded-[2rem] overflow-hidden relative group flex-1 min-h-[30vh] md:min-h-0 cursor-pointer gallery-trigger" data-title="Radiologie" data-desc="Des équipements 3D dernière génération permettant un diagnostic immédiat.">
+                                        <img src="images/_DSF0131.jpg" alt="Détail équipement" class="w-full h-full object-cover transition-transform duration-[1.5s] ease-out group-hover:scale-105 gs-parallax gallery-img">
+                                        <div class="absolute inset-0 bg-forest/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                                    </div>
+                                    <div class="rounded-[2rem] bg-[#E8E6DF] flex flex-col justify-center p-8 lg:p-10 flex-1 relative">
+                                        <svg viewBox="0 0 24 24" fill="none" class="w-8 h-8 text-sage/40 mb-4 absolute top-8 right-8"><path d="M10 11l-2 2v4h4v-4H8l2-2zm10 0l-2 2v4h4v-4h-4l2-2z" stroke="currentColor" stroke-width="1"/></svg>
+                                        <p class="text-[10px] uppercase tracking-[0.25em] text-forest/50 font-semibold mb-4">Notre Philosophie</p>
+                                        <p class="text-forest/90 font-serif text-2xl lg:text-3xl leading-snug">Rigueur, d'où naissent <br>transparence et confort.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 2 : Full Page Image -->
+                    <div class="cabinet-panel w-[94vw] lg:w-[85vw] h-full flex-shrink-0">
+                        <div class="w-full h-full rounded-[2rem] overflow-hidden relative group cursor-pointer gallery-trigger" data-title="Salle d'attente" data-desc="Un espace chaleureux pour vous accueillir en toute sérénité.">
+                            <img src="images/salle-attente.png" alt="Salle d'attente" class="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105 gallery-img" onerror="this.src='images/_DSF0227.jpg'">
+                            <div class="absolute inset-0 bg-forest/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                        </div>
+                    </div>
+
+                    <!-- Panel 3 : Two Images Layout -->
+                    <div class="cabinet-panel w-[94vw] lg:w-[85vw] h-full flex-shrink-0">
+                        <div class="w-full h-full grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div class="rounded-[2rem] overflow-hidden relative group h-full cursor-pointer gallery-trigger" data-title="Salle de soins 2" data-desc="Un environnement apaisant doté d'équipements de pointe pour vos traitements.">
+                                <img src="images/A7404306.jpg" alt="Détails cabinet" class="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105 gallery-img" onerror="this.src='images/A7404325.jpg'">
+                                <div class="absolute inset-0 bg-forest/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            </div>
+                            <div class="rounded-[2rem] overflow-hidden relative group h-full cursor-pointer gallery-trigger" data-title="Accueil" data-desc="Le premier contact, où l'élégance de l'accueil reflète notre engagement d'excellence.">
+                                <img src="images/_DSF0154.jpg" alt="Détails cabinet" class="w-full h-full object-cover object-center transition-transform duration-[1.5s] ease-out group-hover:scale-105 gallery-img" onerror="this.src='images/A7404313.jpg'">
+                                <div class="absolute inset-0 bg-forest/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spacer at the end for visual padding -->
+                    <div class="w-[3vw] h-full flex-shrink-0"></div>
+
+                </div>
+            </div>
+
+            <!-- GSAP Script for Horizontal Scroll -->
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    // Small delay to ensure other scroll triggers are processed and layouts are stable
+                    setTimeout(() => {
+                        if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+                            const track = document.getElementById("cabinet-track");
+                            const container = document.getElementById("cabinet-pin-container");
+                            
+                            gsap.to(track, {
+                                x: () => -(track.scrollWidth - window.innerWidth),
+                                ease: "none",
+                                scrollTrigger: {
+                                    trigger: container,
+                                    start: "center center", // Centre le bloc au milieu de l'écran avant de bloquer le scroll
+                                    pin: true,
+                                    scrub: 1.5, // Super smooth dragging
+                                    end: () => "+=" + (track.scrollWidth * 0.8), // Controls scroll speed mapping
+                                    invalidateOnRefresh: true 
+                                }
+                            });
+                        }
+                    }, 500);
+                });
+            </script>
+
+            <!-- Lightbox Overlay -->
+            <div id="gallery-lightbox" class="fixed inset-0 z-[100] bg-[#18332A]/95 backdrop-blur-xl opacity-0 pointer-events-none transition-opacity duration-500 flex items-center justify-center cursor-pointer">
+                
+                <!-- Close btn -->
+                <button id="lightbox-close" class="absolute top-6 md:top-10 left-1/2 -translate-x-1/2 w-12 h-12 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all z-50">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-5 h-5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                </button>
+
+                <!-- Arrows -->
+                <button id="lightbox-prev" class="absolute left-4 md:left-10 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all z-50 group">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6 group-hover:-translate-x-1 transition-transform"><path d="M15 19l-7-7 7-7"/></svg>
+                </button>
+                <button id="lightbox-next" class="absolute right-4 md:right-10 top-1/2 -translate-y-1/2 w-12 h-12 md:w-16 md:h-16 rounded-full border border-white/20 flex items-center justify-center text-white/50 hover:text-white hover:bg-white/10 transition-all z-50 group">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" class="w-6 h-6 group-hover:translate-x-1 transition-transform"><path d="M9 5l7 7-7 7"/></svg>
+                </button>
+
+                <!-- Content -->
+                <div class="w-[90vw] md:w-[80vw] h-[80vh] flex flex-col justify-center items-center relative">
+                    <div class="relative max-w-full max-h-[70vh] flex items-center justify-center">
+                        <img id="lightbox-img" src="" alt="" class="max-w-full max-h-[70vh] object-contain rounded-lg shadow-2xl opacity-0 transition-opacity duration-300">
+                    </div>
+                    
+                    <!-- Text info -->
+                    <div id="lightbox-info" class="absolute bottom-[-2rem] md:bottom-[-4rem] text-center w-full transform translate-y-4 opacity-0 transition-all duration-500 delay-100">
+                        <h4 id="lightbox-title" class="font-serif text-2xl md:text-3xl text-white mb-2"></h4>
+                        <p id="lightbox-desc" class="text-xs md:text-sm text-white/60 tracking-wider uppercase"></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Lightbox Logic -->
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    const lightbox = document.getElementById('gallery-lightbox');
+                    const popupImg = document.getElementById('lightbox-img');
+                    const popupTitle = document.getElementById('lightbox-title');
+                    const popupDesc = document.getElementById('lightbox-desc');
+                    const infoBox = document.getElementById('lightbox-info');
+                    
+                    const triggers = document.querySelectorAll('.gallery-trigger');
+                    const images = document.querySelectorAll('.gallery-img'); // corresponds to triggers via index
+                    
+                    let currentIndex = 0;
+                    let isOpen = false;
+
+                    function openLightbox(index) {
+                        currentIndex = index;
+                        const trigger = triggers[index];
+                        const img = images[index];
+
+                        if (!trigger || !img) return;
+
+                        // Set contents
+                        popupImg.src = img.src;
+                        popupTitle.textContent = trigger.getAttribute('data-title');
+                        popupDesc.textContent = trigger.getAttribute('data-desc');
+
+                        // Show lightbox
+                        lightbox.classList.remove('opacity-0', 'pointer-events-none');
+                        lightbox.classList.add('opacity-100', 'pointer-events-auto');
+                        
+                        // Fade in image and text
+                        setTimeout(() => {
+                            popupImg.classList.remove('opacity-0');
+                            infoBox.classList.remove('translate-y-4', 'opacity-0');
+                            infoBox.classList.add('translate-y-0', 'opacity-100');
+                        }, 100);
+
+                        isOpen = true;
+                        document.body.style.overflow = 'hidden'; // Stop background scrolling
+                    }
+
+                    function closeLightbox() {
+                        // Fade out inner contents
+                        popupImg.classList.add('opacity-0');
+                        infoBox.classList.remove('translate-y-0', 'opacity-100');
+                        infoBox.classList.add('translate-y-4', 'opacity-0');
+                        
+                        // Hide lightbox
+                        setTimeout(() => {
+                            lightbox.classList.remove('opacity-100', 'pointer-events-auto');
+                            lightbox.classList.add('opacity-0', 'pointer-events-none');
+                            isOpen = false;
+                            document.body.style.overflow = '';
+                        }, 300);
+                    }
+
+                    function showPrev() {
+                        if (!isOpen) return;
+                        popupImg.classList.add('opacity-0');
+                        infoBox.classList.remove('translate-y-0', 'opacity-100');
+                        infoBox.classList.add('translate-y-4', 'opacity-0');
+                        
+                        setTimeout(() => {
+                            currentIndex = (currentIndex - 1 + triggers.length) % triggers.length;
+                            openLightbox(currentIndex);
+                        }, 250);
+                    }
+
+                    function showNext() {
+                        if (!isOpen) return;
+                        popupImg.classList.add('opacity-0');
+                        infoBox.classList.remove('translate-y-0', 'opacity-100');
+                        infoBox.classList.add('translate-y-4', 'opacity-0');
+                        
+                        setTimeout(() => {
+                            currentIndex = (currentIndex + 1) % triggers.length;
+                            openLightbox(currentIndex);
+                        }, 250);
+                    }
+
+                    // Attach events to thumbnails
+                    triggers.forEach((trigger, idx) => {
+                        trigger.addEventListener('click', () => openLightbox(idx));
+                    });
+
+                    // Controls
+                    document.getElementById('lightbox-close').addEventListener('click', closeLightbox);
+                    document.getElementById('lightbox-prev').addEventListener('click', (e) => { e.stopPropagation(); showPrev(); });
+                    document.getElementById('lightbox-next').addEventListener('click', (e) => { e.stopPropagation(); showNext(); });
+
+                    // Click outside to close (or anywhere that's not a button)
+                    lightbox.addEventListener('click', (e) => {
+                        if(!e.target.closest('#lightbox-prev') && !e.target.closest('#lightbox-next')) {
+                            closeLightbox();
+                        }
+                    });
+
+                    // Keyboard nav
+                    document.addEventListener('keydown', (e) => {
+                        if (!isOpen) return;
+                        if (e.key === 'Escape') closeLightbox();
+                        if (e.key === 'ArrowLeft') showPrev();
+                        if (e.key === 'ArrowRight') showNext();
+                    });
+                });
+            </script>
+
+        </section>
+
+        <!-- Wrapper Technologies (Growing Background) -->
+        <section id="technologies-wrapper" class="relative w-full z-20 py-24 md:py-32 mt-[-2rem]">
+            
+            <!-- Arrière-plan vert qui va "grandir" au scroll -->
+            <div id="techno-bg" class="absolute bottom-0 left-1/2 -translate-x-1/2 w-[85%] h-[80%] bg-forest rounded-t-[5vw] z-0 overflow-hidden">
+                <!-- Inner subtle noise or texture could go here -->
+            </div>
+
+            <div class="max-w-[94vw] lg:max-w-7xl mx-auto px-4 md:px-8 relative z-10 text-sand">
+                
+                <!-- Titre centré, asymétrique -->
+                <div class="mb-16 md:mb-24 gsap-fade-up w-full text-center">
+                    <span class="text-xs uppercase tracking-[0.28em] text-sand/60 font-semibold mb-5 block">Plateau Technique</span>
+                    <h3 class="text-4xl md:text-6xl font-serif leading-tight text-white mb-6">Précision & Biomimétisme.</h3>
+                    <p class="text-sand/80 text-lg md:text-xl font-light max-w-2xl mx-auto leading-relaxed">
+                        L'intégration subtile de technologies d'avant-garde au service de votre confort chirurgical et d'une prédictibilité diagnostique absolue.
+                    </p>
+                    <div class="mt-10">
+                        <a href="#" class="inline-flex items-center gap-3 px-8 py-4 border border-sand/30 hover:border-sand hover:bg-sand hover:text-forest text-sand rounded-full uppercase tracking-widest text-xs font-semibold transition-all duration-300">
+                            En savoir +
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Disposition Épurée 3 Technologies -->
+                <div class="relative w-full grid grid-cols-1 md:grid-cols-3 gap-y-12 md:gap-x-10 pb-12 items-start">
+                    
+                    <!-- Tech 1 -->
+                    <div class="gsap-fade-up flex flex-col z-10 group">
+                        <div class="overflow-hidden rounded-[2rem] h-[45vh] md:h-[55vh] w-full relative mb-6">
+                            <img src="images/cone-beam.png" alt="Cone Beam 3D" class="w-full h-full object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105" onerror="this.src='images/_DSF0119-Modifier.jpg'">
+                            <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <span class="text-sand/30 text-3xl font-serif leading-none mt-1">01</span>
+                            <div>
+                                <h4 class="text-2xl font-serif text-white mb-2">Imagerie 3D Cone Beam</h4>
+                                <p class="text-sand/70 text-sm leading-relaxed font-light">Reconstitution tridimensionnelle haute définition pour une planification implantaire microscopique.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech 2 -->
+                    <div class="gsap-fade-up flex flex-col z-10 group">
+                        <div class="overflow-hidden rounded-[2rem] h-[45vh] md:h-[55vh] w-full relative mb-6">
+                            <img src="images/L1003290-Modifier.jpg" alt="Caméra Optique" class="w-full h-full object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105" onerror="this.src='images/_DSF0068.jpg'">
+                            <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <span class="text-sand/30 text-3xl font-serif leading-none mt-1">02</span>
+                            <div>
+                                <h4 class="text-2xl font-serif text-white mb-2">Caméra Optique</h4>
+                                <p class="text-sand/70 text-sm leading-relaxed font-light">Empreintes numériques ultrarapides, supprimant totalement l'inconfort pour une symétrie parfaite.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tech 3 -->
+                    <div class="gsap-fade-up flex flex-col z-10 group">
+                        <div class="overflow-hidden rounded-[2rem] h-[45vh] md:h-[55vh] w-full relative mb-6">
+                            <img src="images/A7404281.jpg" alt="Thérapie PRF" class="w-full h-full object-cover transition-transform duration-[2.5s] ease-out group-hover:scale-105" onerror="this.src='images/_DSF0154.jpg'">
+                            <div class="absolute inset-0 bg-black/10 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"></div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <span class="text-sand/30 text-3xl font-serif leading-none mt-1">03</span>
+                            <div>
+                                <h4 class="text-2xl font-serif text-white mb-2">Protocole PRF</h4>
+                                <p class="text-sand/70 text-sm leading-relaxed font-light">Concentration de vos propres facteurs de croissance par centrifugation pour sécuriser la cicatrisation.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- ScrollTrigger Script pour faire grandir le fond -->
+            <script>
+                document.addEventListener("DOMContentLoaded", () => {
+                    setTimeout(() => {
+                        if (typeof gsap !== "undefined" && typeof ScrollTrigger !== "undefined") {
+                            gsap.to("#techno-bg", {
+                                scrollTrigger: {
+                                    trigger: "#technologies-wrapper",
+                                    start: "top 85%", // Démarre quand la section arrive dans l'écran
+                                    end: "top 15%",  // Se termine quand le haut de la section est presque en haut
+                                    scrub: 1         // Suit le scroll de façon smooth
+                                },
+                                width: "100%",
+                                height: "100%",
+                                borderRadius: "0px", // Le fond devient complètement plat/plein écran
+                                ease: "none"
+                            });
+                        }
+                    }, 500);
+                });
+            </script>
+        </section>
+
+        <!-- Équipe 50/50 Pleine Largeur -->
+        <section id="equipe" class="w-full relative z-10 flex flex-col lg:flex-row items-stretch">
+            
+            <!-- Image à gauche (Pleine hauteur, sans marge, sans bord arrondi, collée au bord) -->
+            <div class="w-full lg:w-1/2 relative flex min-h-[60vh] lg:min-h-[85vh] bg-black/5">
+                <img src="images/equipe.png" alt="Équipe du cabinet" class="w-full h-full object-cover object-center absolute inset-0" onerror="this.src='images/A7404315.jpeg'">
+            </div>
+            
+            <!-- Texte à droite (Aéré et centré) -->
+            <div class="w-full lg:w-1/2 flex flex-col justify-center px-8 py-16 lg:py-24 lg:px-20 xl:px-32 gsap-fade-up bg-[#F3F1EC]/30">
+                <span class="text-xs uppercase tracking-[0.28em] text-forest/50 font-semibold mb-6 block">L'équipe du cabinet</span>
+                
+                <h3 class="text-4xl md:text-5xl lg:text-6xl font-serif text-forest leading-tight mb-8">
+                    Une synergie clinique<br>
+                    <span class="italic font-light">au service de votre sourire.</span>
+                </h3>
+                
+                <p class="text-forest/70 text-lg md:text-xl font-light leading-relaxed mb-10 max-w-lg">
+                    Un seul niveau d'exigence, du premier contact au suivi post-opératoire. Notre complémentarité clinique et assistante est la garantie de votre sérénité tout au long de votre parcours de soins.
+                </p>
+                
+                <div>
+                    <a href="#contact" class="inline-flex items-center gap-3 px-8 py-4 border border-forest/30 hover:border-forest hover:bg-forest hover:text-white text-forest rounded-full uppercase tracking-widest text-xs font-semibold transition-all duration-300">
+                        Prendre rendez-vous
+                    </a>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- Logo Transition "Moitié/Moitié" -->
+        <div class="relative w-full z-[60] flex justify-center mt-[-4.5rem] md:mt-[-7rem] -mb-16 md:-mb-16 pointer-events-none">
+            <div class="w-10 h-10 md:w-36 md:h-36 bg-[#F3F1EC] rounded-full p-1 md:p-2 flex items-center justify-center shadow-[0_10px_10px_rgba(0,0,0,0.3)] border border-white relative">
+                <img src="images/logo-dr-defrennes.png" alt="Logo" class="w-[100%] h-[100%] object-contain translate-y-1">
+            </div>
+        </div>
+
+        <!-- Laboratoire Full Bleed -->
+        <section id="laboratoire" class="w-full bg-forest text-cream relative overflow-hidden z-10 flex flex-col md:flex-row items-stretch">
+            
+            <!-- Left Text -->
+            <div class="w-full md:w-1/2 px-8 py-16 md:py-24 md:px-16 lg:px-24 xl:px-32 flex flex-col justify-center relative">
+                <div class="gsap-fade-up max-w-xl">
+                    <span class="text-xs md:text-sm uppercase tracking-[0.3em] text-sand font-semibold mb-6 block">Laboratoire Partenaire</span>
+                    
+                    <h3 class="text-4xl md:text-5xl lg:text-6xl font-serif leading-tight mb-8">
+                        L'artisanat français<br>
+                        <span class="italic font-light text-sand/80">à Tourcoing.</span>
+                    </h3>
+                    
+                    <p class="text-cream/80 text-lg md:text-xl font-light leading-relaxed">
+                        Travail artisanal, matériaux premium et traçabilité complète. Notre collaboration exclusive avec un laboratoire local garantit l'excellence, l'esthétique et la pérennité de chaque restauration prothétique.
+                    </p>
+
+                </div>
+            </div>
+
+            <!-- Right Large Image Full Bleed -->
+            <div class="w-full md:w-1/2 min-h-[40vh] md:min-h-[55vh] relative overflow-hidden bg-black/20">
+                <img src="images/labo.jpg" alt="Vue Laboratoire" class="w-full h-[120%] object-cover absolute top-[-10%] left-0 gs-parallax" onerror="this.src='images/A7404315.jpeg'">
+                <div class="absolute inset-0 bg-forest/10"></div>
+            </div>
+
+        </section>
+
+
+
+        <!-- Pre-Footer CTA -->
+        <section class="w-full bg-[#E8E4D9] py-24 lg:py-40 relative overflow-hidden flex flex-col items-center text-center px-4 z-10">
+            <!-- Background Image with Opacity -->
+            <img src="images/_DSF0230-Panorama.jpg" alt="Cabinet dentaire Armentières" class="absolute inset-0 w-full h-full object-cover opacity-30 select-none pointer-events-none mix-blend-multiply" onerror="this.src='images/_DSF0227.jpg'">
+            <!-- Gradient Overlay for readability -->
+            <div class="absolute inset-0 bg-gradient-to-t from-[#E8E4D9]/90 via-[#E8E4D9]/60 to-[#E8E4D9]/80 pointer-events-none"></div>
+
+            <div class="relative z-10 flex flex-col items-center w-full">
+                <span class="text-xs md:text-sm uppercase tracking-[0.28em] text-forest/70 font-semibold mb-6 block drop-shadow-sm">Consultation</span>
+                <h2 class="text-5xl md:text-7xl lg:text-8xl font-serif text-forest mb-12 leading-none drop-shadow-sm">
+                    Prêt à retrouver<br>votre sourire ?
+                </h2>
+                <div class="flex flex-col sm:flex-row gap-6 w-full justify-center max-w-3xl mx-auto">
+                    <a href="https://www.doctolib.fr/dentiste/armentieres/simon-deffrennes" target="_blank" class="inline-flex items-center justify-center px-12 py-6 bg-forest text-white rounded-full uppercase tracking-[0.15em] text-sm font-semibold hover:bg-forest/90 hover:scale-105 transition-all duration-300 shadow-[0_10px_40px_rgba(24,51,42,0.3)]">
+                        Prendre RDV sur Doctolib
+                    </a>
+                    <a href="tel:+33320491732" class="inline-flex items-center justify-center px-12 py-6 bg-[#E8E4D9]/80 backdrop-blur-sm border-2 border-forest text-forest rounded-full uppercase tracking-[0.15em] text-sm font-semibold hover:bg-forest hover:text-white transition-all duration-300 shadow-xl shadow-forest/10">
+                        03 20 49 17 32
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer Full Screen -->
+        <footer id="contact" class="w-full bg-forest text-cream pt-20 pb-4 relative z-20 overflow-hidden">
+            <!-- Decorative Large Subtle Logo Background (Optional) -->
+            <div class="absolute -right-32 -bottom-32 opacity-25 pointer-events-none">
+                <img src="images/ecritures-logo.png" alt="Bg Logo" class="h-96 md:h-[600px] object-contain">
+            </div>
+
+            <div class="max-w-7xl mx-auto px-6 md:px-12 relative z-10">
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-16 mb-16 items-start">
+                    
+                    <!-- Accès -->
+                    <div class="flex flex-col gsap-fade-up">
+                        <h4 class="text-2xl font-serif text-sand mb-6">Accès</h4>
+                        <p class="text-lg font-light mb-4 text-white/90">
+                            87 Rue de Dunkerque,<br>
+                            59280 Armentières
+                        </p>
+                        <a href="https://www.google.com/maps?q=87+Rue+de+Dunkerque,+59280+Armentières" target="_blank" class="text-xs uppercase tracking-widest text-sand hover:text-white transition-colors underline underline-offset-4 mb-10 w-fit">
+                            Ouvrir dans Google Maps
+                        </a>
+                        
+                        <h5 class="text-xs uppercase tracking-[0.2em] text-sand/80 mb-4 font-semibold">Transports</h5>
+                        <ul class="space-y-3 text-sm font-light text-white/70">
+                            <li><strong class="font-normal text-white">Bus - Place Aux Toiles</strong> (79 et CITA)</li>
+                            <li><strong class="font-normal text-white">Bus - Pierre Beregovoy</strong> (ligne 79)</li>
+                            <li><strong class="font-normal text-white">Bus - Hotel De Ville</strong> (CITA, 82, 80 et 79)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Horaires -->
+                    <div class="flex flex-col gsap-fade-up">
+                        <h4 class="text-2xl font-serif text-sand mb-6">Horaires</h4>
+                        <ul class="space-y-4 text-white/80 font-light text-lg">
+                            <li class="flex justify-between border-b border-white/10 pb-3">
+                                <span>Lun - Ven</span>
+                                <span class="text-white">08h00 - 19h00</span>
+                            </li>
+                            <li class="flex justify-between border-b border-white/10 pb-3 text-white/40">
+                                <span>Sam - Dim</span>
+                                <span>Fermé</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Logo (Très grand) -->
+                    <div class="flex flex-col items-center lg:items-end justify-center h-full gsap-fade-up">
+                        <img src="images/logo-clair.png" alt="Logo Docteur Simon Deffrennes" class="h-40 md:h-56 lg:h-64 object-contain opacity-95 hover:opacity-100 transition-opacity" onerror="this.src='';">
+                    </div>
+                </div>
+
+                <!-- Footer Bottom -->
+                <div class="flex flex-col md:flex-row justify-between items-center gap-4 border-t border-white/10 pt-6 text-white/50 w-full text-[10px] md:text-xs uppercase tracking-widest gsap-fade-up">
+                    <div class="flex flex-wrap justify-center gap-4 items-center text-center">
+                        <span>&copy; 2026 Dr Simon Deffrennes.</span>
+                        <span class="hidden md:inline">|</span>
+                        <a href="#" class="hover:text-sand transition-colors">Mentions légales</a>
+                    </div>
+                    
+                    <div class="flex items-center gap-2 normal-case tracking-wider text-sm font-light mt-2 md:mt-0">
+                        Made with <span class="text-red-500 scale-125 cursor-default mt-[-2px]">❤️</span> by 
+                        <a href="https://beyourmoon.com" target="_blank" class="hover:opacity-80 transition-opacity flex items-center" style="font-family: 'Limelight', sans-serif; font-size: 1.15rem; color: #ADA597; line-height: 1;">
+                            BeYourMoon
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </main>
+
+    <script>
+        // Reset Scroll position on load for better UX
+        window.history.scrollRestoration = 'manual';
+
+        // GSAP Setup
+        gsap.registerPlugin(ScrollTrigger);
+
+        // Navbar Logic (Dark/Light mode based on scroll without mix-blend-difference)
+        const nav = document.getElementById('navbar');
+        const navLogo = document.getElementById('nav-logo');
+        const LOGO_LIGHT = 'images/logo-clair.png';
+        const LOGO_DARK = 'images/logo-dr-defrennes.png';
+        const line1 = document.getElementById('line1');
+        const line2 = document.getElementById('line2');
+        const menuBtn = document.getElementById('menu-toggle');
+        const menuOverlay = document.getElementById('menu');
+        const navItems = document.querySelectorAll('.nav-item');
+        let isOpen = false;
+
+        // Force colors on load
+        function updateNavColors() {
+            if (isOpen) return; // Menu overrides
+
+            const btn = document.getElementById('nav-cta');
+            const menuTxt = document.getElementById('menu-text');
+
+            if (window.scrollY > window.innerHeight - 80) {
+                // We are in the white/cream section
+                navLogo.classList.replace('h-24', 'h-16');
+                navLogo.classList.replace('md:h-32', 'md:h-20');
+                navLogo.src = LOGO_DARK;
+                navLogo.style.filter = 'none';
+
+                menuBtn.classList.remove('border-white/50', 'bg-black/20');
+                menuBtn.classList.add('border-forest/30', 'bg-white/80');
+
+                line1.classList.replace('bg-white', 'bg-forest');
+                line2.classList.replace('bg-white', 'bg-forest');
+                line1.classList.replace('bg-black', 'bg-forest');
+                line2.classList.replace('bg-black', 'bg-forest');
+
+                if (btn) {
+                    btn.classList.add('bg-forest', 'text-white');
+                    btn.classList.remove('text-forest');
+                }
+                if (menuTxt) menuTxt.classList.replace('text-white', 'text-forest');
+            } else {
+                // We are in the hero/video section
+                navLogo.classList.replace('h-16', 'h-24');
+                navLogo.classList.replace('md:h-20', 'md:h-32');
+                navLogo.src = LOGO_LIGHT;
+                navLogo.style.filter = 'none'; // pure white natively
+
+                menuBtn.classList.remove('border-forest/30', 'bg-white/80');
+                menuBtn.classList.add('border-white/50', 'bg-black/20');
+
+                line1.classList.replace('bg-forest', 'bg-white');
+                line2.classList.replace('bg-forest', 'bg-white');
+                line1.classList.replace('bg-black', 'bg-white');
+                line2.classList.replace('bg-black', 'bg-white');
+
+                if (btn) {
+                    btn.classList.add('bg-forest', 'text-white');
+                    btn.classList.remove('text-forest');
+                }
+                if (menuTxt) menuTxt.classList.replace('text-forest', 'text-white');
+            }
+        }
+
+        window.addEventListener('scroll', updateNavColors);
+        window.addEventListener('load', updateNavColors); // run on load
+
+        // Intro Fade ups
+        gsap.utils.toArray('.gsap-fade-up').forEach(elem => {
+            gsap.fromTo(elem, 
+                { y: 60, opacity: 0 },
+                {
+                    scrollTrigger: {
+                        trigger: elem,
+                        start: "top 85%",
+                    },
+                    y: 0,
+                    opacity: 1,
+                    duration: 1.2,
+                    ease: "power3.out"
+                }
+            );
+        });
+
+        // Parallax Effect strictly using GSAP
+        // (Move the image itself within its container to avoid breaking layout)
+        gsap.utils.toArray('.gs-parallax').forEach(parallaxImg => {
+            gsap.to(parallaxImg, {
+                yPercent: 15,
+                ease: "none",
+                scrollTrigger: {
+                    trigger: parallaxImg.parentElement,
+                    start: "top bottom",
+                    end: "bottom top",
+                    scrub: true
+                }
+            });
+        });
+
+        // Stagger Text blocks
+        gsap.utils.toArray('.gsap-stagger').forEach(container => {
+            gsap.fromTo(container.children,
+                { y: 30, opacity: 0 },
+                {
+                    scrollTrigger: { trigger: container, start: "top 80%" },
+                    y: 0, opacity: 1, duration: 1, stagger: 0.15, ease: "power3.out"
+                }
+            );
+        });
+
+        // Highlighted treatment micro-animation
+        gsap.to('.implant-highlight', {
+            y: -6,
+            boxShadow: '0 20px 40px rgba(24, 51, 42, 0.28)',
+            duration: 1.8,
+            repeat: -1,
+            yoyo: true,
+            ease: 'sine.inOut'
+        });
+
+        // Custom Cursor
+        const cursorDot = document.querySelector('.cursor-dot');
+        const cursorOutline = document.querySelector('.cursor-outline');
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+            
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+            
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 400, fill: "forwards" });
+        });
+
+        document.querySelectorAll('a, button, input, .cursor-pointer').forEach(el => {
+            el.addEventListener('mouseenter', () => {
+                cursorOutline.style.width = '60px';
+                cursorOutline.style.height = '60px';
+                cursorOutline.style.border = '1px solid rgba(24, 51, 42, 0.8)';
+                cursorOutline.style.backgroundColor = 'rgba(24, 51, 42, 0.05)';
+            });
+            el.addEventListener('mouseleave', () => {
+                cursorOutline.style.width = '40px';
+                cursorOutline.style.height = '40px';
+                cursorOutline.style.border = '1px solid rgba(24, 51, 42, 0.5)';
+                cursorOutline.style.backgroundColor = 'transparent';
+            });
+        });
+
+        // Fullscreen Menu Toggle
+
+        menuBtn.addEventListener('click', () => {
+            isOpen = !isOpen;
+            const btn = document.getElementById('nav-cta');
+            const menuTxt = document.getElementById('menu-text');
+            
+            if(isOpen) {
+                // Open menu
+                nav.classList.remove('backdrop-blur-md', 'bg-cream/90');
+                navLogo.src = LOGO_LIGHT;
+                navLogo.style.filter = 'none'; // pure white for menu
+                menuBtn.classList.remove('border-forest/30', 'bg-white/80');
+                menuBtn.classList.add('border-white/40', 'bg-white/10');
+                line1.classList.replace('bg-forest', 'bg-white');
+                line2.classList.replace('bg-forest', 'bg-white');
+                line1.classList.replace('bg-black', 'bg-white');
+                line2.classList.replace('bg-black', 'bg-white');
+
+                if (btn) {
+                    btn.classList.add('bg-forest', 'text-white');
+                    btn.classList.remove('text-forest');
+                }
+                if (menuTxt) {
+                    menuTxt.innerText = 'Fermer';
+                    menuTxt.classList.replace('text-forest', 'text-white');
+                }
+
+                menuOverlay.classList.add('open');
+                line1.classList.add('translate-y-[4px]', 'rotate-45');
+                line2.classList.add('-translate-y-[3px]', '-rotate-45', 'w-4');
+
+                gsap.fromTo(navItems,
+                    { y: 40, opacity: 0 },
+                    { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, delay: 0.3, ease: "power3.out" }
+                );
+            } else {
+                // Close menu
+                menuOverlay.classList.remove('open');
+                line1.classList.remove('translate-y-[4px]', 'rotate-45');
+                line2.classList.remove('-translate-y-[3px]', '-rotate-45', 'w-4');
+                
+                if (menuTxt) {
+                    menuTxt.innerText = 'Menu';
+                }
+
+                setTimeout(() => {
+                    updateNavColors();
+                }, 500);
+            }
+        });
+
+        // Close menu on link click
+        navItems.forEach(item => {
+            item.addEventListener('click', () => {
+                isOpen = false;
+                const menuTxt = document.getElementById('menu-text');
+                menuOverlay.classList.remove('open');
+                line1.classList.remove('translate-y-[4px]', 'rotate-45');
+                line2.classList.remove('-translate-y-[3px]', '-rotate-45', 'w-4');
+                if (menuTxt) menuTxt.innerText = 'Menu';
+                setTimeout(() => {
+                    updateNavColors();
+                }, 500);
+            });
+        });
+        // Vimeo Video Sound Toggle
+        const iframe = document.getElementById('hero-video');
+        const soundToggle = document.getElementById('sound-toggle');
+        
+        if (iframe && soundToggle) {
+            const player = new Vimeo.Player(iframe);
+            const iconActionUnmute = document.getElementById('icon-action-unmute');
+            const iconActionMute = document.getElementById('icon-action-mute');
+            let isMuted = true;
+
+            soundToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                if (isMuted) {
+                    player.setMuted(false).catch(e => console.error("Mute error", e));
+                    player.setVolume(1).catch(e => console.error("Vol error", e));
+                    iconActionUnmute.classList.add('hidden');
+                    iconActionMute.classList.remove('hidden');
+                    isMuted = false;
+                } else {
+                    player.setMuted(true).catch(e => console.error("Mute error", e));
+                    player.setVolume(0).catch(e => console.error("Vol error", e));
+                    iconActionMute.classList.add('hidden');
+                    iconActionUnmute.classList.remove('hidden');
+                    isMuted = true;
+                }
+            });
+        }
+    </script>
+
+
+
+
+
+
+<script>
+    // Preloader Logic Final
+    document.addEventListener("DOMContentLoaded", () => {
+        document.body.style.overflow = 'hidden';
+        window.scrollTo(0,0);
+    });
+
+    function hidePreloader() {
+        if (window.preloaderDone) return;
+        window.preloaderDone = true;
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            const tl = gsap.timeline({
+                onComplete: () => {
+                    document.body.style.overflow = ''; 
+                }
+            });
+            tl.to('#preloader-logo', { opacity: 1, duration: 0.8, ease: "power2.out" })
+              .to('#preloader-line', { opacity: 1, duration: 0.4 }, "-=0.2")
+              .to('#preloader-progress', { x: '0%', duration: 1.2, ease: "power3.inOut" })
+              .to(preloader, { opacity: 0, y: "-100%", duration: 1, ease: "power4.inOut", delay: 0.2 })
+              .set(preloader, { display: 'none' });
+        }
+    }
+
+    window.addEventListener('load', hidePreloader);
+    setTimeout(hidePreloader, 2500); // 2.5s absolute fallback so it never hangs
+
+    // Smooth lenis Scroll
+    const lenis = new Lenis({
+        duration: 1.2,
+        easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+        direction: 'vertical',
+        gestureDirection: 'vertical',
+        smooth: true,
+        smoothTouch: false,
+        touchMultiplier: 2,
+    });
+
+    function raf(time) {
+        lenis.raf(time);
+        requestAnimationFrame(raf);
+    }
+    requestAnimationFrame(raf);
+</script>
+
+</body>
+</html>
