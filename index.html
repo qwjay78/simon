@@ -51,24 +51,24 @@
         .bracket-accent::before, .bracket-accent::after {
             content: '';
             position: absolute;
-            width: 10px;
-            height: 10px;
+            width: 8px;
+            height: 8px;
             border-color: currentColor;
-            opacity: 0.9;
+            opacity: 0.8;
             pointer-events: none;
         }
         .bracket-accent::before {
-            top: -3px;
+            top: -2px;
             left: 0;
-            border-top: 1.5px solid;
-            border-left: 1.5px solid;
+            border-top: 1.2px solid;
+            border-left: 1.2px solid;
             border-top-left-radius: 1px;
         }
         .bracket-accent::after {
-            bottom: -3px;
+            bottom: -2px;
             right: 0;
-            border-bottom: 1.5px solid;
-            border-right: 1.5px solid;
+            border-bottom: 1.2px solid;
+            border-right: 1.2px solid;
             border-bottom-right-radius: 1px;
         }
 
@@ -421,15 +421,15 @@
                 <div class="flex flex-col gap-8">
                     <!-- Address -->
                     <div class="group">
-                        <p class="uppercase tracking-[0.2em] text-[9px] text-white/40 mb-2">Adresse</p>
+                        <p class="uppercase tracking-[0.2em] text-[9px] text-white/40 mb-2"><span class="bracket-accent">Adresse</span></p>
                         <a href="https://www.google.com/maps?q=87+Rue+de+Dunkerque,+59280+Armentières" target="_blank" class="text-sm lg:text-base hover:text-sand transition-colors block">
                             87 Rue de Dunkerque,<br>59280 Armentières
                         </a>
                     </div>
-                    
+
                     <!-- Phone -->
                     <div class="group">
-                        <p class="uppercase tracking-[0.2em] text-[9px] text-white/40 mb-2">Téléphone</p>
+                        <p class="uppercase tracking-[0.2em] text-[9px] text-white/40 mb-2"><span class="bracket-accent">Téléphone</span></p>
                         <a href="tel:+33320491732" class="text-xl lg:text-3xl font-serif hover:text-sand transition-colors block">
                             03 20 49 17 32
                         </a>
@@ -1270,7 +1270,7 @@
                             Ouvrir dans Google Maps
                         </a>
                         
-                        <h5 class="text-xs uppercase tracking-[0.2em] text-sand/80 mb-4 font-semibold">Transports</h5>
+                        <h5 class="text-xs uppercase tracking-[0.2em] text-sand/80 mb-4 font-semibold"><span class="bracket-accent">Transports</span></h5>
                         <ul class="space-y-3 text-sm font-light text-white/70">
                             <li><strong class="font-normal text-white">Bus - Place Aux Toiles</strong> (79 et CITA)</li>
                             <li><strong class="font-normal text-white">Bus - Pierre Beregovoy</strong> (ligne 79)</li>
